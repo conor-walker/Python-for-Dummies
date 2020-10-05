@@ -31,7 +31,8 @@ def gameFlow(deck):
 
     # prompts for input and deals cards to middle deck 3 times
     # quits on input of F/f
-    for deals in range(3):
+    numDeals=3 # number of deals to the middle used in texas hold'em
+    for deals in range(numDeals):
         userDecision = str(input("Your hand is: " + str(userHand) + ". Would you like to (C)ontinue or (F)old?: "))
         while userDecision.lower() != "c" and userDecision.lower() != "f":
             userDecision = input(str("Please enter C to continue, or F to fold: "))
