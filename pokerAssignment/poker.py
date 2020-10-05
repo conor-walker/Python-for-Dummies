@@ -1,5 +1,6 @@
 import playingCard
 
+
 # There's a fair bit of extra work that can be done on this, but I'm conscious of time so submitting while it's working
 # i.e. before I break it in half with extra additions!
 # Comments:
@@ -101,7 +102,7 @@ def pairScore(numList, scoreDict):
 
 
 # Determines if 5 of one suit are in any users hand
-def flush(suitList,scoreDict):
+def flush(suitList, scoreDict):
     for hand in enumerate(suitList):
         currentHand = hand[1]
         currentPlayer = hand[0]
@@ -115,7 +116,7 @@ def flush(suitList,scoreDict):
 
 
 # Determines if hands possess a sequence of 5 cards in a row. Additionally checks if they are of the same suit
-def straight(numList, suitList, scoreDict,):
+def straight(numList, suitList, scoreDict, ):
     for hand in enumerate(numList):
         print(hand)
         currentHand = hand[1]
@@ -129,20 +130,19 @@ def straight(numList, suitList, scoreDict,):
                 straightCount += 1
                 prevCard = card
 
-        if (straightCount >= 4) and flush(suitList[currentHand][1],scoreDict) == True:
+        if (straightCount >= 4) and flush(suitList[currentHand][1], scoreDict) == True:
             scoreDict[currentPlayer] = [8, card]  # gives highest score for straight in same suite if flush present
         elif straightCount >= 4 and scoreDict[currentPlayer][0] <= 4:
             scoreDict[currentPlayer] = [4, card]
 
 
 # Calculates the winning score and user based on the values in scoreDict
-# I tried to separate this into two functions but for some reason it does not like that, and crashes :(
-# Would revisit in future when i have more time!
+
 def winningScore(scoreDict, hands):
     playerScores = list(scoreDict.values())
     playerID = list(scoreDict.keys())
     maxScore = max(playerScores)
-    tie = False
+    winningPlayer=-1 # initialises with unnatural value to prevent crash if returned in draw
 
     for players in range(len(hands)):
         playingCard.convertNumbersToFaces(hands[players])
@@ -152,18 +152,21 @@ def winningScore(scoreDict, hands):
             print("Player " + str(players + 1) + " had hand: " + str(hands[players]))
 
     if playerScores.count(maxScore) > 1:
-        tie = True
+        print("The game is drawn - more than one player had an identical hand")
+        print("There are no winners today!")
+        winningPlayer=-1
+        quit()
     else:
         winningPlayer = playerID[playerScores.index(maxScore)]
 
+    return winningPlayer, maxScore
+
+
+def printScore(winningPlayer, maxScore):
     scoreExplain = {1: "Highest card", 2: "Pair", 3: "Three of a kind", 4: "Straight", 5: "Flush", 6: "Full House",
                     7: "Four of a kind", 8: "Straight of one suit"}
 
-    if tie:
-        print("The game is drawn - more than one player had an identical hand: " + str(scoreExplain[maxScore[0]]))
-        print("There are no winners today!")
-
-    elif winningPlayer == 0:
+    if winningPlayer == 0:
         print("You have won with a score of " + str(maxScore[0]) + "!")
         print("The winning hand was: " + str(scoreExplain[maxScore[0]]))
     else:
@@ -179,7 +182,8 @@ def main():
     pairScore(numList, scoreDict)
     flush(suitList, scoreDict)
     straight(numList, suitList, scoreDict)
-    winningScore(scoreDict, hands)
+    winningPlayer, maxScore = winningScore(scoreDict, hands)
+    printScore(winningPlayer, maxScore)
 
 
 main()
