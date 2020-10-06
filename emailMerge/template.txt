@@ -1,0 +1,6 @@
+Hi %%FIRST NAME%%
+
+We are pleased to invite your company %%COMPANY NAME%% to our %%EVENT%% on %%EVENT DATE%%. We hope %%COMPANY NAME%% will join us.
+
+Thanks
+Derek
